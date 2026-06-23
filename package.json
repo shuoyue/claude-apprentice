@@ -1,0 +1,38 @@
+{
+  "name": "claude-apprentice",
+  "version": "1.0.0",
+  "description": "Train Claude Code into a reliable apprentice — spec-driven, memory-backed, code-reviewed.",
+  "bin": {
+    "apprentice": "./bin/apprentice.js"
+  },
+  "files": [
+    "bin",
+    "templates",
+    "install.sh",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "keywords": [
+    "claude-code",
+    "ai-engineering",
+    "harness",
+    "spec-driven",
+    "code-review",
+    "apprentice",
+    "agent",
+    "cli"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shuoyue/claude-apprentice.git"
+  },
+  "homepage": "https://github.com/shuoyue/claude-apprentice#readme",
+  "bugs": {
+    "url": "https://github.com/shuoyue/claude-apprentice/issues"
+  }
+}
