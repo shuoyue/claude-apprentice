@@ -29,6 +29,14 @@ cd your-project
 curl -fsSL https://raw.githubusercontent.com/shuoyue/claude-apprentice/main/install.sh | bash
 ```
 
+> **网络问题备选方案**：如果 curl 报 SSL 错误（`no alternative certificate subject name matches`，常见于大陆网络环境），改用任一方式：
+> - **A. npx（最稳，走 npm 协议）**：`npx claude-apprentice init`
+> - **B. git clone（git 用自己的 SSL 实现，比 curl 容错）**：
+>   ```bash
+>   git clone https://github.com/shuoyue/claude-apprentice /tmp/claude-apprentice
+>   bash /tmp/claude-apprentice/install.sh
+>   ```
+
 ### 初始化后做什么
 
 1. 检查 `CLAUDE.md` 中的技术栈信息

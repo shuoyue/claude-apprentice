@@ -16,6 +16,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.2] — 2026-07-01
+
+### Fixed — Network Fallback Doc
+
+First-day real-user feedback from mainland China: the curl one-liner in README failed with `SSL: no alternative certificate subject name matches target host name 'raw.githubusercontent.com'`. Root cause: GFW DNS poisoning + macOS curl using LibreSSL 3.3 with an incomplete CA bundle — curl intermittently resolves to a poisoned IP and cannot validate the cert.
+
+- **`README.md`** — Added a blockquote under the curl install command listing two fallback options when SSL fails:
+  - **A. npx** (recommended, goes through npm protocol instead of HTTPS curl)
+  - **B. git clone** (git uses its own SSL implementation, more tolerant than curl)
+
+> Deliberately omitted `curl -k` (skip cert verification) — that's a security risk in untrusted network environments.
+
+---
+
 ## [1.1.1] — 2026-07-01
 
 ### Fixed — Install UX
