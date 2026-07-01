@@ -83,7 +83,10 @@ function cmdInit(args) {
   log('下一步:');
   log('  1. 检查 CLAUDE.md 中的技术栈信息');
   log('  2. 补充 .claude/memory/business-logic.md');
-  log('  3. 运行 apprentice doctor 验证');
+  log('  3. 运行健康检查（任选其一）:');
+  log('');
+  log('     npx claude-apprentice doctor    # 推荐，免安装');
+  log('     apprentice doctor               # 需先 npm install -g claude-apprentice');
 }
 
 function cmdUpdate() {

@@ -160,11 +160,14 @@ Propose（提案）→ Apply（实施）→ Archive（归档）
 ## CLI 命令
 
 ```bash
-apprentice init                # 初始化项目（复制模板 + 运行 init.sh）
-apprentice update              # 增量更新（不覆盖已有文件）
-apprentice doctor              # 运行健康检查
-apprentice version             # 显示版本号
-apprentice help                # 显示帮助
+# 方式 A：npx 免安装（推荐）
+npx claude-apprentice init       # 初始化项目
+npx claude-apprentice update     # 增量更新
+npx claude-apprentice doctor     # 运行健康检查
+
+# 方式 B：全局安装后短命令
+npm install -g claude-apprentice
+apprentice init / update / doctor / version / help
 ```
 
 ---
@@ -284,7 +287,7 @@ claude
 
 ```bash
 # 增量更新，已有文件不覆盖
-apprentice update
+npx claude-apprentice update      # 或全局安装后: apprentice update
 ```
 
 ## 详细文档
@@ -296,7 +299,7 @@ apprentice update
 
 ## 相关
 
-- **Blog (中文)**: 公众号「造物手记」— author's writings on AI engineering
+- **Blog (中文)**: 公众号「造物手稿」— author's writings on AI engineering
 - **Mitchell Hashimoto's [AGENTS.md](https://github.com/mitchellh/agentkit)** — inspiration for `learned-lessons.md`
 - **Anthropic's [Claude Code Skills](https://docs.claude.com/en/docs/agents-and-tools/claude-code/skills)** — the underlying mechanism
 

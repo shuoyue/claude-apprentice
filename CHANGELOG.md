@@ -16,6 +16,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.1] — 2026-07-01
+
+### Fixed — Install UX
+
+First-day real-user feedback: `apprentice init` succeeded but `apprentice doctor` returned `command not found`. Root cause: README recommended `npx claude-apprentice init`, but npx does not register a global `apprentice` command, and the "next step" hint told users to run `apprentice doctor` directly.
+
+- **`bin/apprentice.js`** — Rewrote the "next step" hint at the end of `init` to show both options:
+  - `npx claude-apprentice doctor` (recommended, no install)
+  - `apprentice doctor` (requires `npm install -g claude-apprentice`)
+- **`install.sh`** — Same fix applied to the curl-based installer's completion message.
+- **`README.md`** — "CLI commands" section now explicitly shows two usage modes (npx vs global install) instead of just `apprentice <cmd>`.
+
+---
+
+## [1.1.0] — 2026-06-29
+
+### Added — Governance
+- **SSOT governance doc** (`GOVERNANCE.md`)
+  - Defines single source of truth (claude-apprentice) and runtime instance role (.claude/)
+  - Dual versioning policy: content version (v5.x) vs npm package version (1.x.x)
+  - Change flow: experiment → consolidate → publish → consume
+  - Anti-patterns and decision log
+
+### Changed
+- Simplified to two-repository model (SSOT + runtime instance); tsc-toolkit frozen as snapshot, no longer maintained
+
+---
+
 ## [1.0.0] — 2026-06-22
 
 First public release. Open-sourced from internal v5.7.

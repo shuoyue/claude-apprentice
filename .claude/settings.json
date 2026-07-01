@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git show *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git diff-tree *)",
+      "Bash(git status *)",
+      "Bash(git branch *)"
+    ],
+    "deny": [
+      "Bash(git push --force *)",
+      "Bash(git reset --hard *)",
+      "Bash(rm -rf *)"
+    ]
+  },
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true,
+    "document-skills@anthropic-agent-skills": true
+  },
+  "language": "chinese",
+  "theme": "auto"
+}
