@@ -1,6 +1,6 @@
 {
   "name": "claude-apprentice",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Train Claude Code into a reliable apprentice — spec-driven, memory-backed, code-reviewed.",
   "bin": {
     "apprentice": "./bin/apprentice.js"

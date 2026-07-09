@@ -14,19 +14,36 @@ function ok(msg) { console.log(`\x1b[32m  ✓\x1b[0m ${msg}`); }
 function warn(msg) { console.log(`\x1b[33m  ⚠\x1b[0m ${msg}`); }
 function err(msg) { console.error(`\x1b[31m  ✗\x1b[0m ${msg}`); }
 
-function copyDir(src, dest) {
+function copyDir(src, dest, force = false) {
   if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
   for (const entry of fs.readdirSync(src)) {
     if (entry === '.DS_Store') continue;
     const srcPath = path.join(src, entry);
     const destPath = path.join(dest, entry);
     if (fs.statSync(srcPath).isDirectory()) {
-      copyDir(srcPath, destPath);
+      copyDir(srcPath, destPath, force);
     } else {
-      if (!fs.existsSync(destPath)) {
+      if (force || !fs.existsSync(destPath)) {
         fs.copyFileSync(srcPath, destPath);
       }
     }
+  }
+}
+
+// 智能合并 settings.json：用户配置优先（permissions/theme 等保留），模板补充用户缺失的 key（hooks 等）
+// 顺序 {...tmpl, ...user}：user 在后覆盖 tmpl，保证用户的 permissions 等不被模板默认值盖掉；
+// 用户没有的 key（如旧版无 hooks）则保留模板的，从而装上新机制
+function mergeSettingsJson(claudeDir) {
+  const tmplPath = path.join(TEMPLATES_DIR, 'settings.json');
+  const userPath = path.join(claudeDir, 'settings.json');
+  if (!fs.existsSync(tmplPath) || !fs.existsSync(userPath)) return;
+  try {
+    const tmpl = JSON.parse(fs.readFileSync(tmplPath, 'utf8'));
+    const user = JSON.parse(fs.readFileSync(userPath, 'utf8'));
+    fs.writeFileSync(userPath, JSON.stringify({ ...tmpl, ...user }, null, 2) + '\n');
+    ok('settings.json 智能合并（用户配置优先，模板补充缺失项）');
+  } catch (e) {
+    warn('settings.json 合并失败: ' + e.message + '（跳过，请手动检查）');
   }
 }
 
@@ -89,17 +106,23 @@ function cmdInit(args) {
   log('     apprentice doctor               # 需先 npm install -g claude-apprentice');
 }
 
-function cmdUpdate() {
+function cmdUpdate(args) {
   const target = getTargetDir();
   const claudeDir = path.join(target, '.claude');
+  const force = Array.isArray(args) && (args.includes('--force') || args.includes('-f'));
 
   if (!fs.existsSync(claudeDir)) {
     err('.claude/ 目录不存在，请先运行 apprentice init');
     process.exit(1);
   }
 
-  log('增量更新...');
-  copyDir(TEMPLATES_DIR, claudeDir);
+  if (force) {
+    log('强制更新（覆盖已有文件，用户定制重置为模板）...');
+    copyDir(TEMPLATES_DIR, claudeDir, true);
+  } else {
+    log('增量更新（已有文件保留，settings.json 智能合并）...');
+    copyDir(TEMPLATES_DIR, claudeDir);
+  }
 
   const initSh = path.join(claudeDir, 'scripts', 'init.sh');
   if (fs.existsSync(initSh)) {
@@ -109,6 +132,10 @@ function cmdUpdate() {
     } catch (e) {
       warn('init.sh 执行中出现警告（可忽略）');
     }
+  }
+
+  if (!force) {
+    mergeSettingsJson(claudeDir);
   }
 
   log('');
@@ -146,7 +173,7 @@ function cmdHelp() {
 
 \x1b[1m命令:\x1b[0m
   init                初始化当前项目（复制模板 + 运行 init.sh）
-  update              增量更新（不覆盖已有文件）
+  update              增量更新（settings.json 智能合并装 hooks，其余已有文件保留）；--force 强制覆盖
   doctor              运行健康检查
   version             显示版本号
   help                显示帮助信息
@@ -176,7 +203,7 @@ switch (command) {
     cmdInit(args.slice(1));
     break;
   case 'update':
-    cmdUpdate();
+    cmdUpdate(args.slice(1));
     break;
   case 'doctor':
     cmdDoctor();

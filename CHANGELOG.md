@@ -16,6 +16,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.1] — 2026-07-09
+
+### Fixed — update 命令无法装上 settings.json hooks
+
+1.2.0 的会话交接机制依赖 settings.json 的 3 个 hook，但 `update` 的 `copyDir` 是「已有文件不覆盖」+ `init.sh` 跳过已存在的 settings.json，导致已 init 用户跑 `update` 后拿不到 hooks（机制残缺、不工作）。
+
+- **`bin/apprentice.js`** — `update` 新增 `mergeSettingsJson`：对 settings.json 做 `{...tmpl, ...user}` 合并——用户 permissions/theme 等优先保留，模板补充用户缺失的 hooks 等机制配置。既装上 hooks，又不覆盖用户 permissions。
+
+### Added — update --force
+
+- **`bin/apprentice.js`** — `update --force`：强制覆盖所有文件（含 settings.json、CLAUDE.md），重置为模板原版。兜底用，会丢失用户定制。
+- `cmdHelp` 的 update 描述更新，反映智能合并 + --force。
+
+---
+
 ## [1.2.0] — 2026-07-09
 
 ### Added — 会话交接协议（切会话连续性）
