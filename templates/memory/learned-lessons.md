@@ -48,14 +48,6 @@
 - **规避规则：** 完成前必须运行验证命令（构建、测试、lint），贴出当前运行结果作为证据
 - **添加日期:** 2026-05-27
 
-### L-009: 复杂项目编排时主会话 context 撑爆
-
-- **错误现象：** 用 subagent 编排复杂项目，单个任务隔离了，但主会话累积所有阶段对话 + subagent 返回 + 跨任务决策，最终报 `reached its context window limit` 中断
-- **根因：** subagent 隔离了「执行 context」，没隔离「编排 context」——主会话当仓库而非指挥官，状态囤在对话里而非文件里（L-004「上下文腐化」的编排层升级版）
-- **规避规则：** 复杂项目按 workflow 阶段切会话；阶段结束 `/handoff` 写 CURRENT.md 快照 → `/clear` → 新会话从 spec/plan/CURRENT/memory 四文件重建上下文，而非靠聊天记录
-- **沉淀位置：** `.claude/CURRENT.md` + `/handoff` 命令 + SessionStart hook 自动注入（见 `WORKFLOW-GUIDE.md`「会话交接协议」）
-- **添加日期:** 2026-07-09
-
 ## 架构错误
 
 ### L-007: Controller 层写业务逻辑
@@ -75,6 +67,14 @@
 - **沉淀位置：** `commands/scan-todos.md` v2 已加自指过滤规则和情况 A/B 双模板
 - **元教训：** Loop 层试点跑一次就暴露工程问题 — 这正是 Loop 的价值,不是失败
 - **添加日期:** 2026-06-22
+
+### L-009: 复杂项目编排时主会话 context 撑爆
+
+- **错误现象：** 用 subagent 编排复杂项目，单个任务隔离了，但主会话累积所有阶段对话 + subagent 返回 + 跨任务决策，最终报 `reached its context window limit` 中断
+- **根因：** subagent 隔离了「执行 context」，没隔离「编排 context」——主会话当仓库而非指挥官，状态囤在对话里而非文件里（L-004「上下文腐化」的编排层升级版）
+- **规避规则：** 复杂项目按 workflow 阶段切会话；阶段结束 `/handoff` 写 CURRENT.md 快照 → `/clear` → 新会话从 spec/plan/CURRENT/memory 四文件重建上下文，而非靠聊天记录
+- **沉淀位置：** `.claude/CURRENT.md` + `/handoff` 命令 + SessionStart hook 自动注入（见 `WORKFLOW-GUIDE.md`「会话交接协议」）
+- **添加日期:** 2026-07-09
 
 ---
 
