@@ -19,5 +19,40 @@
     "document-skills@anthropic-agent-skills": true
   },
   "language": "chinese",
-  "theme": "auto"
+  "theme": "auto",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "grep -q '^状态：进行中' \"$CLAUDE_PROJECT_DIR/.claude/CURRENT.md\" 2>/dev/null && cat \"$CLAUDE_PROJECT_DIR/.claude/CURRENT.md\" || true"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f \"$CLAUDE_PROJECT_DIR/.claude/.handoff-remind\" ] && echo '⚠️ [自动提醒·可选] Context 接近上限已触发自动压缩。建议先执行 /handoff 保存任务交接快照（防止压缩后丢失上下文），再 /clear 开新会话。请向用户确认是否现在执行 /handoff。' || true"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/scripts/handoff-context-check.sh\""
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -949,6 +949,7 @@ AI 走完整 7 步流程：
 | L-006 | 流程 | 口头说"应该没问题" | 完成前必须运行验证命令 |
 | L-007 | 架构 | Controller 层写业务逻辑 | 禁止跨层调用 |
 | L-008 | Loop | 扫描类命令自指噪声(`/scan-todos` 试点踩坑) | 扫描时排除 `.claude/commands/`、`.claude/usage-guides/`,并对剩余结果做自指过滤 |
+| L-009 | 流程 | 复杂项目编排时主会话 context 撑爆 | 按阶段切会话，阶段结束 `/handoff` 写 CURRENT.md 快照 |
 
 ### 11.2 记录规则
 

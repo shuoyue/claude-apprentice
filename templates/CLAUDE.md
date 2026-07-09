@@ -44,6 +44,7 @@
 | `.claude/skills/` | 完整工作流编排 | 走 workflow 时按需加载 |
 | `.claude/memory/` | 项目知识库（架构、规范、业务，含 `learned-lessons.md` 错误登记册） | 需要项目上下文时引用 |
 | `.claude/specs/` | 功能规格文档 | 中等+复杂任务时创建和引用 |
+| `.claude/CURRENT.md` | **任务级会话交接**（切会话连续性） | 复杂项目切会话前用 `/handoff` 更新 |
 | `.claude/scripts/` | 初始化和验证脚本 | 新项目接入时使用 |
 | `.claude/reports/` | 代码评审报告输出 | 评审完成后自动生成 |
 | `.claude/usage-guides/` | 操作手册（v1.0） | 查阅体系用法时引用 |

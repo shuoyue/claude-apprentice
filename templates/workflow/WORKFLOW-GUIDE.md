@@ -60,9 +60,28 @@
 | 产物 | 文件位置 | 谁产出 | 谁消费 | 状态流转 |
 |------|---------|--------|--------|---------|
 | Spec | `specs/active/` → `specs/archived/` | brainstorming | 所有下游阶段 | Proposed → Applied → Completed |
-| 任务计划 | 对话上下文（不落文件） | writing-plans | executing-plans | - |
+| 任务计划 | `docs/superpowers/plans/YYYY-MM-DD-<feature>.md` | writing-plans | executing-plans | - |
 | 代码 | 项目源码目录 | executing-plans | code-review | - |
 | 评审报告 | `.claude/reports/` | code-review | 用户 + finishing | - |
+| **当前交接** | `.claude/CURRENT.md` | 每阶段结束 `/handoff` | 新会话（SessionStart 注入）| 模板 → 进行中 → 已完成 |
+
+## 会话交接协议（切会话连续性）
+
+> 复杂项目不在一个会话干完。状态落盘，靠 CURRENT.md 接力，保证切会话后连续。
+
+**为什么**：主会话编排多阶段 + 多 subagent，编排 context 必然撑爆（L-004）；subagent 隔离了执行 context，没隔离编排 context。解法是把「当前快照」落盘，新会话从文件重建，而非靠聊天记录。
+
+**三件套**：
+
+| 环节 | 机制 |
+|------|------|
+| 写 | 每阶段结束 `/handoff` → 更新 CURRENT.md（状态置「进行中」）|
+| 读 | 新会话 SessionStart hook 自动注入 CURRENT.md（确定性，不靠提醒）|
+| 清 | 任务完成 → 状态改「已完成」+ 归档 |
+
+**切会话 SOP**：阶段X 做完 → `/handoff`（写快照）→ `/clear` → 新会话 hook 注入 → 读 `@spec` `@plan` → 从「下一步」接着做阶段X+1。
+
+**四文件重建**：`spec`（WHAT 真相）+ `plan`（HOW 拆解）+ `CURRENT`（停在哪快照）+ `memory`（WHY 沉淀）——任一会话都能完整接上。
 
 ## 与 Superpowers 配置的关系
 
