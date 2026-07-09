@@ -102,7 +102,7 @@
 
 1. **`--quick` 短路**：定时任务（如每日 9:03 cron）先用 `--quick` 跑，无修改直接跳过 dry-run，省 90% token
 2. **假阳性记忆化**：`known_false_positives` 数组里的文件不再刷屏（如历史版本 v5.2~v5.7）
-3. **降频建议**：连续 7 次 no_diff 时提示降频
+3. **降频建议**：连续 `hint_threshold` 次（默认 7，可在 state 文件中调整）no_diff 时提示降频
 
 详见 [scripts/README.md](scripts/README.md#state-文件机制重要)。
 

@@ -94,6 +94,7 @@ STATE_LAST_CHECK=""
 STATE_LAST_RESULT=""
 STATE_CONSECUTIVE_NO_DIFF=0
 STATE_RUNTIME_MTIME_EPOCH=0
+STATE_HINT_THRESHOLD=7
 KNOWN_FP=()
 
 if [[ -f "$STATE_FILE" ]]; then
@@ -107,6 +108,7 @@ try:
     print('STATE_LAST_RESULT=' + repr(data.get('last_check_result', '')))
     print('STATE_CONSECUTIVE_NO_DIFF=' + str(data.get('consecutive_no_diff', 0)))
     print('STATE_RUNTIME_MTIME_EPOCH=' + str(data.get('runtime_mtime_epoch', 0)))
+    print('STATE_HINT_THRESHOLD=' + str(data.get('hint_threshold', 7)))
 except Exception as e:
     import sys
     print('# state parse error: ' + str(e), file=sys.stderr)
@@ -194,11 +196,12 @@ state = {
     'consecutive_no_diff': int(sys.argv[2]),
     'known_false_positives': json.loads(sys.argv[8]),
     'runtime_mtime_epoch': int(sys.argv[3]),
+    'hint_threshold': int(sys.argv[10]) if len(sys.argv) > 10 else 7,
 }
 with open(sys.argv[9], 'w') as f:
     json.dump(state, f, indent=2, ensure_ascii=False)
     f.write('\n')
-" "$result" "$consecutive" "$mtime_epoch" "$real_count" "$all_count" "$real_json" "$all_json" "$fp_json" "$STATE_FILE"
+" "$result" "$consecutive" "$mtime_epoch" "$real_count" "$all_count" "$real_json" "$all_json" "$fp_json" "$STATE_FILE" "$STATE_HINT_THRESHOLD"
 }
 
 # ── Quick 模式：检查 .claude/ 模板路径是否有新修改 ─────────────────
@@ -223,9 +226,9 @@ if $QUICK && $STATE_EXISTS && [[ -z "$SINGLE_FILE" ]] && ! $APPLY; then
     echo "━━━ pull-from-runtime (QUICK) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "  ✓ 自上次检查（${STATE_LAST_CHECK:-未知}）以来 .claude/ 模板路径无修改"
     echo "  连续无差异次数: $((STATE_CONSECUTIVE_NO_DIFF + 1))"
-    if [[ $((STATE_CONSECUTIVE_NO_DIFF + 1)) -ge 7 ]]; then
+    if [[ $((STATE_CONSECUTIVE_NO_DIFF + 1)) -ge $STATE_HINT_THRESHOLD ]]; then
       echo ""
-      echo "  💡 已连续 7+ 次无差异，建议考虑降低检查频率（如改成每周）"
+      echo "  💡 已连续 ${STATE_HINT_THRESHOLD}+ 次无差异，建议考虑降低检查频率（如改成每周）"
     fi
     # 更新 consecutive_no_diff，写 state
     write_state_after_check "no_diff" $((STATE_CONSECUTIVE_NO_DIFF + 1)) "$STATE_RUNTIME_MTIME_EPOCH" 0 0
@@ -359,8 +362,8 @@ if ! $APPLY; then
   if [[ $REAL_TOTAL -eq 0 ]]; then
     echo ""
     echo "  ✓ 无真差异需回传（$FP_TOTAL 个假阳性已静默，连续 $CONSECUTIVE 次无差异）"
-    if [[ $CONSECUTIVE -ge 7 ]]; then
-      echo "  💡 已连续 7+ 次无差异，建议考虑降低检查频率（如改成每周）"
+    if [[ $CONSECUTIVE -ge $STATE_HINT_THRESHOLD ]]; then
+      echo "  💡 已连续 ${STATE_HINT_THRESHOLD}+ 次无差异，建议考虑降低检查频率（如改成每周）"
     fi
     exit 0
   fi
