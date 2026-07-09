@@ -215,7 +215,7 @@ your-project/
     │   └── auto-review.sh          # PostToolUse hook 自动评审
     ├── usage-guides/               # 操作手册
     │   ├── README.md
-    │   ├── usage-guide-v5.8.md
+    │   ├── usage-guide-v5.9.md
     │   └── bottleneck-navigation.md  # 瓶颈定位指南
     └── memory/                     # 项目知识库
         ├── architecture.md

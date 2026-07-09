@@ -16,6 +16,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.0] — 2026-07-09
+
+### Added — 会话交接协议（切会话连续性）
+
+复杂项目不在一个会话干完，编排 context 必然撑爆（L-004）。新增 CURRENT.md 快照机制：每阶段 `/handoff` 落盘当前状态，新会话 SessionStart hook 自动注入，保证切会话后连续接上。
+
+- **`templates/CURRENT.md`**（新增）— 任务级交接快照模板（任务/进度/环境/关键决策/下一步/红线）
+- **`templates/commands/handoff.md` + `handoff-auto.md`**（新增）— `/handoff` 写快照、`/handoff-auto` 条件提醒
+- **`templates/scripts/handoff-context-check.sh`**（新增）— UserPromptSubmit hook，检测 context 用量提醒交接
+- **`templates/settings.json`** — 三 hook：SessionStart 注入 CURRENT.md / PreCompact 压缩前提醒 / UserPromptSubmit context 检查
+- **`templates/workflow/WORKFLOW-GUIDE.md`** — 新增「会话交接协议」节与四文件重建 SOP
+- **`templates/CLAUDE.md`** — 文档地图加 CURRENT.md 行
+- **`templates/memory/learned-lessons.md`** — L-009（编排 context 必爆，靠落盘重建而非记忆）
+
+### Added — sync state 可配置化
+
+- **`scripts/pull-from-runtime.sh`** — 新增 `hint_threshold` state 字段（默认 7），降频提示阈值可配置；想静默设 999
+- **`scripts/README.md` / `GOVERNANCE.md`** — 文档化 state 字段
+
+### Changed — 版本升级
+
+- 内容版本 v5.8 → **v5.9**（usage-guide 同步改名 v5.9）
+- npm 包版本 1.1.2 → **1.2.0**（MINOR：新增模板/hooks/命令）
+- 修正 SSOT `templates/CLAUDE.md` 误标 v1.0 的双轨版本号 bug（应为内容版本 v5.9，见 GOVERNANCE §3）
+
+---
+
 ## [1.1.2] — 2026-07-01
 
 ### Fixed — Network Fallback Doc

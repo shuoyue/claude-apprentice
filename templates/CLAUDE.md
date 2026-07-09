@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-**体系版本:** v1.0 | **更新日期:** 2026-06-22
+**体系版本:** v5.9 | **更新日期:** 2026-07-09
 
 ## 技术栈
 
@@ -47,7 +47,7 @@
 | `.claude/CURRENT.md` | **任务级会话交接**（切会话连续性） | 复杂项目切会话前用 `/handoff` 更新 |
 | `.claude/scripts/` | 初始化和验证脚本 | 新项目接入时使用 |
 | `.claude/reports/` | 代码评审报告输出 | 评审完成后自动生成 |
-| `.claude/usage-guides/` | 操作手册（v1.0） | 查阅体系用法时引用 |
+| `.claude/usage-guides/` | 操作手册（v5.9） | 查阅体系用法时引用 |
 | `.claude/usage-guides/bottleneck-navigation.md` | **瓶颈定位指南** | AI 效果不好时按层排查 |
 
 ## 复杂度分级

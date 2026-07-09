@@ -4,6 +4,7 @@
 
 | 版本 | 文件 | 日期 | 主要变更 |
 |------|------|------|---------|
+| v5.9 | [usage-guide-v5.9.md](usage-guide-v5.9.md) | 2026-07-09 | 会话交接协议（CURRENT.md + 三 hook + /handoff）、hint_threshold 可配置、L-009 |
 | v5.8 | [usage-guide-v5.8.md](usage-guide-v5.8.md) | 2026-06-22 | 瓶颈定位指南、Loop 层试点（`/scan-todos`、`auto-review.sh`）、Rules 触发索引、错误驱动闭环 |
 | v5.7 | [usage-guide-v5.7.md](usage-guide-v5.7.md) | 2026-06-02 | 评审增强；新增 `/spec` 命令（强制产出 spec，不进入实现）；FAQ 新增 Q8/Q9 |
 | v5.6 | [usage-guide-v5.6.md](usage-guide-v5.6.md) | 2026-06-01 | 章节重组：初始化提到第一节、5分钟上手加入初始化引导、代码评审前置 |
